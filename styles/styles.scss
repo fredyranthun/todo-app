@@ -1,0 +1,285 @@
+@import '_reset';
+
+// variables;
+// primary colors:
+$brightBlue: hsl(220, 98%, 61%);
+$checkBackground: linear-gradient(to bottom right, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+
+// light theme:
+$veryLightGray: hsl(0, 0%, 98%);
+$veryLightGrayishBlue: hsl(236, 33%, 92%);
+$lightGrayishBlue: hsl(233, 11%, 84%);
+$darkGrayishBlue: hsl(236, 9%, 61%);
+$veryDarkGrayishBlue: hsl(235, 19%, 35%);
+
+// dark theme:
+
+$veryDarkBlue: hsl(235, 21%, 11%);
+$veryDarkDesaturatedBlue: hsl(235, 24%, 19%);
+$lightGrayishBlue2: hsl(234, 39%, 85%);
+$lightGrayishBlueHover: hsl(236, 33%, 92%);
+$darkGrayishBlue2: hsl(234, 11%, 52%);
+$veryDarkGrayishBlue2: hsl(233, 14%, 35%);
+$veryDarkGrayishBlue3: hsl(237, 14%, 26%);
+
+$roundCorners: 0.3rem;
+
+
+:root {
+    --background-color: #{$veryLightGrayishBlue};
+    --background-image: url('../images/bg-desktop-light.jpg');
+    --block-background: #{$veryLightGray};
+    --border: #{$lightGrayishBlue};
+    --icon: url('../images/icon-moon.svg');
+    --checked-color: #{$lightGrayishBlue};
+    --not-checked-icon: #{$lightGrayishBlue};
+    --footer: #{$darkGrayishBlue};
+    --not-checked-color: #{$veryDarkGrayishBlue};
+    --block-list: #{$darkGrayishBlue};
+    --block-width: 85vw;
+}
+// update colors and images for dark mode;
+[data-theme="dark"] {
+    --background-color: #{$veryDarkBlue};
+    --background-image: url('../images/bg-desktop-dark.jpg');
+    --block-background: #{$veryDarkDesaturatedBlue};
+    --border: #{$veryDarkGrayishBlue2};
+    --icon: url('../images/icon-sun.svg');
+    --checked-color: #{$veryDarkGrayishBlue2};
+    --not-checked-icon: #{$veryDarkGrayishBlue2};
+    --footer: #{$veryDarkGrayishBlue2};
+    --not-checked-color: #{$lightGrayishBlue2};
+    --block-list: #{$darkGrayishBlue2};
+}
+
+@media screen and (min-width:450px) {  
+    :root {
+        --block-width: 420px;
+    }
+}
+
+// common configs for blocks and icons;
+@mixin beforeConfig {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    min-height: 1rem;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+@mixin blockConfig {
+    display: flex;
+    width: var(--block-width);
+    align-items: center;
+    padding: 0.5rem;
+    min-height: 3rem;
+    background-color: var(--block-background);
+    border-top: 1px solid var(--border);
+}
+
+*, *::before, *::after{
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 18px;
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    background-image: var(--background-image);
+    background-color: var(--background-color);
+    background-repeat: no-repeat;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+}
+.block-header {
+    width: var(--block-width);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1rem;
+    color: white;
+    display: flex;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    &::after{
+        content: var(--icon);
+        margin-left: auto;
+        cursor: pointer;
+    }
+}
+.block-parent {
+    margin: 1rem;
+}
+.block-form {
+    @include blockConfig();
+    border: none;
+    border-radius: $roundCorners;
+    &::before{
+        @include beforeConfig();
+        content: '';
+        border: 1px solid var(--not-checked-icon);
+    }
+}
+.block {
+    @include blockConfig();
+    justify-content: flex-start;
+    color: var(--not-checked-color);
+    &:first-of-type {
+        border: none;
+        border-top-right-radius: $roundCorners;
+        border-top-left-radius: $roundCorners;
+    }
+}
+.block-clear {
+    cursor: pointer;
+    width: 25%;
+    &:hover {
+        color: var(--not-checked-color);
+        font-weight: 700;
+    }
+}
+.checked {
+    text-decoration: line-through;
+    color: var(--checked-color);
+    
+    &::before{
+        @include beforeConfig();
+        content: url(../images/icon-check.svg);
+        background-image: $checkBackground;
+        text-align: center;
+    }
+}
+.notChecked {
+    &:hover{
+        font-weight: 700;
+        &::before{
+            border: 2px solid transparent;
+            background: $checkBackground border-box;
+            mask: 
+                linear-gradient(#fff 0 0) padding-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+        }
+        &::after {
+            content: url('../images/icon-cross.svg');
+            margin-left: auto;
+            margin-right: 1em;
+        }
+    }
+    &::before{
+        @include beforeConfig();
+        content: '';
+        border: 1px solid var(--not-checked-icon);
+    }
+}
+
+.block-modified {
+    @include blockConfig();
+    justify-content: space-between;
+    font-size: 0.6rem;
+    color: var(--block-list);
+    border-bottom-left-radius: $roundCorners;
+    border-bottom-right-radius: $roundCorners;
+}
+.block-first {
+    border-top-right-radius: $roundCorners;
+    border-top-left-radius: $roundCorners;
+}
+.block-hide {
+    display: none;
+}
+.block-list {
+    display: flex;
+    justify-content: space-between;
+    width: 35%;
+    cursor: pointer;
+    & >li {
+        width: 33%;
+    }
+    & >li:hover {
+        font-weight: 700;
+        color: var(--not-checked-color);
+    }
+}
+.block-footer {
+    font-size: 0.6rem;
+    margin-top: auto;
+    color: var(--footer);
+}
+input[type=text] {
+    font-size: 1rem;
+    font-family: inherit;
+    color: $darkGrayishBlue;
+    border: none;
+    background-color: var(--block-background);
+    &:focus {
+        outline: none;
+        color: var(--not-checked-color);
+        background-color: var(--block-background);
+    }
+    &:hover {
+        font-weight: 700;
+    }
+}
+.attribution {
+    font-size: 0.6rem;
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--footer); 
+}
+.attribution a {
+    color: $brightBlue;
+    text-decoration: none;
+    &:hover {
+        font-weight: 700;
+    }
+}
+
+@media screen and (max-width:450px) {  
+    .block-list {
+        width: var(--block-width);
+        order: 5;
+        margin-top: 1rem;
+        background-color: white;
+        min-height: 2rem;
+        justify-content: space-around;
+        align-items: center;
+        border-radius: $roundCorners;
+        padding: 0.5rem;
+        text-align: center;
+    }
+    .block-modified{
+        flex-wrap: wrap;
+        justify-content: space-around;
+        background-color: transparent;
+        padding: 0;
+
+        &>span {
+            display: flex;
+            background-color: white;
+            width: 50%;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            min-height: 2rem;
+            &:first-child {
+                border-bottom-left-radius: $roundCorners;
+            }
+            &:last-child {
+                border-bottom-right-radius: $roundCorners;
+            }
+        }
+    }
+}
